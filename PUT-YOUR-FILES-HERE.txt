@@ -1,0 +1,22 @@
+Put your images and sounds directly in this folder (public/), using
+these exact file names (they are the defaults the component loads):
+
+IMAGES
+  background.jpg       scrolling pixel background on the search screen
+  battle-bg.jpg        static striped background once a Pokemon is found
+  grass-top.png        grass patch under the wild Pokemon
+  grass-bottom.png     grass patch under your Pokemon
+  mightyenaback.png    your Pokemon's back sprite
+  trainer.gif          animated trainer on the search screen
+  trainerstill.jpg     still frame of the trainer
+
+SOUNDS
+  MightyenaCry.mp3     your Pokemon's cry
+  BattleMusic.mp3      battle music intro
+  BattleMusicLoop.mp3  battle music loop
+  ConfirmSound.mp3     select / confirm sound
+  Escape.mp3           back / escape sound
+
+You can delete this text file afterwards. To use different names or
+folders, pass them via the `assets` prop, e.g.
+  <PokeSearch assets={{ trainer: '/img/trainer.gif' }} />
