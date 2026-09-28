@@ -1,101 +1,59 @@
-# PokeSearch — Condensed Build Summary
+# PokeSearch — Build Summary
 
-PokeSearch began as a pixel-art Pokémon search interface featuring a trainer riding a bike through a scrolling background, a **PokeSearch** wordmark, and a rounded search bar connected to PokéAPI.
+PokeSearch evolved from a pixel-art Pokémon search interface into a **React/TypeScript, Gen 3-inspired encounter interface** powered by PokéAPI.
 
-## 1. Initial Search Interface
+## Core Interface
 
-The first version was a single self-contained `pokesearch.html` file with:
+The original `pokesearch.html` included:
 
-- Pixel-art search field and autocomplete.
-- Full Pokémon name list loaded from PokéAPI.
-- Keyboard navigation using **Arrow Keys, Enter, and Escape**.
-- Empty slots for the scrolling background and trainer GIF.
-- Searching for a Pokémon fetched its full API record and emitted a `pokesearch:found` event, without initially displaying results.
+- Pixel-art search field/autocomplete.
+- Pokémon names loaded from PokéAPI.
+- Arrow-key, Enter, and Escape navigation.
+- A scrolling pixel-art background with adjustable zoom, position, and speed.
+- Trainer animation and reduced-motion support.
 
-## 2. Scrolling Scene
+## Encounter System
 
-A supplied pixel-art background was added and duplicated side-by-side to create a seamless scrolling effect.
+Searching for a Pokémon now triggers a battle-style encounter with:
 
-Adjustable CSS variables control:
+- Enemy HUD showing name, level, and HP.
+- Pokémon sprite fetched from PokéAPI.
+- Grass patches and battle background.
+- `"Wild ___ appeared!"` dialogue and encounter effects.
 
-- `--bg-zoom` — scene zoom.
-- `--bg-lift` — vertical positioning.
-- `--bg-speed` — scrolling speed.
+The interface was visually adjusted toward classic Game Boy Pokémon styling, including larger grass/dialogue elements and redesigned HUD colors.
 
-The direction was later reversed, with the search bar moved to the left and trainer to the right. Reduced-motion preferences are supported.
+## React/TypeScript Architecture
 
-## 3. Encounter Screen
-
-Searching successfully was changed from simply logging the Pokémon to triggering a Pokémon-style encounter.
-
-The original walking scene is replaced by a static battlefield containing:
-
-- Enemy HUD with Pokémon name, level, and HP.
-- Two grass-patch image slots.
-- Pokémon sprite automatically obtained from PokéAPI.
-- `"Wild ___ appeared!"` dialogue.
-- A Pokémon-style speech bubble/encounter effect.
-
-The battlefield background, trainer still frame, and grass patches remain user-supplied assets.
-
-Visual adjustments made the interface closer to classic Game Boy Pokémon screens:
-
-- Larger grass patches.
-- Larger dialogue box.
-- Teal-grey dialogue styling with white text.
-- Light-yellow enemy HUD.
-- HUD resized to fit narrow screens.
-
-## 4. React/TypeScript Development
-
-A later development session substantially expanded the project and converted it from a single HTML page into a **React + TypeScript application**.
-
-The encounter now progresses through states such as:
-
-`search → found → sendout → menu → info/species/moves`
-
-The application was eventually rebuilt using strict TypeScript, typed interfaces, functional components, hooks, and reusable data-driven sub-components.
+The project was rebuilt as a React + TypeScript application using typed interfaces, hooks, functional components, and centralized keyboard handling.
 
 Main components include:
 
-- `EnemyHud`
-- `BattleDialog`
-- `CommandMenu`
-- `MoveDetailsPanel`
-- `SearchPanel`
-- `ControlsWindow`
-- `MovesGrid`
+`EnemyHud`, `BattleDialog`, `CommandMenu`, `MoveDetailsPanel`, `SearchPanel`, `ControlsWindow`, and `MovesGrid`.
 
-Keyboard handling is centralized and changes behavior according to the current phase.
+Main flow:
 
-## 5. Player Pokémon / Send-Out Sequence
+`search → found → sendout → menu → info/species/moves`
 
-After the encounter, the player can send out their own Pokémon.
+## Player Pokémon & Menu
 
-Current documented behavior includes:
+The send-out sequence features:
 
-- A **Mightyena back sprite** sliding in from the left.
+- Mightyena back sprite sliding in.
 - `"Go, Mightyena!"` dialogue.
-- Mightyena's own cry.
-- Wild Pokémon cries automatically retrieved from PokéAPI.
-- Legacy cries are preferred, with modern cries as fallback.
+- Mightyena's cry.
+- PokéAPI wild Pokémon cries, preferring legacy cries when available.
+- ~2.2-second send-out dialogue.
 
-The send-out dialogue was extended to approximately **2.2 seconds**.
+The command menu contains:
 
-## 6. Battle Menu
+**INFO / SPECIES / MOVES / BACK**
 
-After the initial encounter dialogue, a command menu appears with:
+Navigation uses arrow keys and **Z**.
 
-- **INFO**
-- **SPECIES**
-- **MOVES**
-- **BACK**
+`BACK` uses a **0.2-second fade to black** and plays the escape sound.
 
-The menu is navigated with arrow keys and selected with **Z**.
-
-`BACK` returns to the search screen using a **0.2-second fade to black** and plays the escape sound.
-
-A **CONTROLS** button was also added, displaying:
+A controls window documents:
 
 | Key | Function |
 |---|---|
@@ -103,93 +61,77 @@ A **CONTROLS** button was also added, displaying:
 | Z | Select |
 | X | Return |
 
-The controls window can be closed with X, Escape, or an outside click.
+## INFO / SPECIES
 
-## 7. INFO and SPECIES Screens
-
-The **INFO** section displays Pokémon information in multiple pages:
+**INFO** displays:
 
 - Height and weight.
 - Base stats.
 
-Text uses a typewriter-style reveal, with the animation completing quickly and pausing when the browser tab is hidden.
-
-The **SPECIES** section additionally displays:
+**SPECIES** additionally displays:
 
 - Type.
 - Abilities.
-- Evolution-chain status.
-- Generation of first appearance.
+- Evolution status.
+- First-generation appearance.
 
-Unevolved Pokémon display `"NONE"` where appropriate.
+Information uses a typewriter-style reveal.
 
-## 8. MOVES Screen
+## MOVES
 
-The MOVES option was rebuilt into a **Generation 3-inspired interface**.
+The MOVES screen uses a **Gen 3-inspired 2×2 grid**:
 
-It contains:
-
-- Four moves arranged in a **2×2 grid**.
+- Four moves.
 - Arrow-key navigation.
-- Move-type-colored borders.
-- A right-side information panel showing:
-  - PP
-  - Move type
-- Move information fetched dynamically from PokéAPI.
+- Type-colored borders.
+- PP and move type in a side panel.
+- Data fetched from PokéAPI.
+- View-only interface.
 
-The moves screen is view-only.
+A bug causing the command menu to remain visible was fixed.
 
-A bug where the command menu remained visible after entering MOVES was also fixed.
+## Sprites & Audio
 
-## 9. Sprites and Audio
-
-Wild Pokémon sprites now prioritize **Generation 3 artwork**, in this order:
+Wild Pokémon sprites prioritize:
 
 1. Emerald
 2. FireRed/LeafGreen
 3. Ruby/Sapphire
-4. Earliest available generation as fallback
+4. Earliest available fallback
 
-Audio was expanded substantially:
+Audio includes:
 
-- Battle music intro when an encounter begins.
-- Seamless battle-music loop afterward.
-- Battle music remains at **80% volume**.
-- Confirm sound when advancing dialogue/selecting options.
-- Escape sound when selecting BACK.
-- Pokémon cries from PokéAPI.
-- Mightyena has a local cry asset.
+- Battle intro and looping battle music.
+- Battle music at 80% volume.
+- Confirmation and escape sounds.
+- PokéAPI Pokémon cries.
+- Local Mightyena cry.
 
-## 10. Current Asset Structure
-
-The documented local assets are:
+## Local Assets
 
 | File | Purpose |
 |---|---|
-| `background.jpg` | Scrolling walking background |
-| `battle-bg.jpg` | Encounter background |
-| `grass-top.png` | Upper grass patch |
-| `grass-bottom.png` | Lower grass patch |
+| `background.jpg` | Walking background |
+| `battle-bg.jpg` | Battle background |
+| `grass-top.png` / `grass-bottom.png` | Grass patches |
 | `trainer.gif` | Animated trainer |
-| `trainerstill.jpg` | Trainer's static frame |
-| `mightyenaback.png` | Player Pokémon sprite |
-| `MightyenaCry.mp3` | Mightyena's cry |
-| `ConfirmSound.mp3` | Confirmation/dialogue sound |
+| `trainerstill.jpg` | Static trainer |
+| `mightyenaback.png` | Mightyena sprite |
+| `MightyenaCry.mp3` | Mightyena cry |
+| `ConfirmSound.mp3` | Confirm/dialogue sound |
 | `Escape.mp3` | BACK sound |
 | `BattleMusic.mp3` | Battle intro |
-| `BattleMusicLoop.mp3` | Battle music loop |
+| `BattleMusicLoop.mp3` | Battle loop |
 
-Wild Pokémon sprites, cries, names, stats, species information, and moves are obtained dynamically from **PokéAPI**, so those do not need local assets.
+Pokémon sprites, cries, names, stats, species data, and moves are fetched dynamically from PokéAPI.
 
-## Current Overall Flow
+## Overall Flow
 
-**Search screen**  
-→ Search Pokémon through PokéAPI  
-→ Encounter animation/background  
+**Search**  
+→ PokéAPI search  
+→ Encounter  
 → Wild Pokémon + HUD + dialogue  
-→ Player sends out Mightyena  
-→ Battle command menu  
+→ Send out Mightyena  
+→ Command menu  
 → **INFO / SPECIES / MOVES / BACK**  
-→ BACK fades to the search screen.
-
-The project has therefore evolved from a simple Pokémon search bar into a **fully interactive, Gen 3-inspired Pokémon encounter interface built in React/TypeScript**, with dynamic PokéAPI data, menus, animations, sprites, sound, and multiple information screens.
+→ BACK returns to Search.
